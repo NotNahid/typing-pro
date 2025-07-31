@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TypePractice - Professional Typing Practice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <svg style="position: absolute; width: 0; height: 0;">
+    <defs>
+      <filter id="liquid-goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  </svg>
+
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">Type<span>Practice</span></div>
+      <div class="controls">
+        <input type="file" id="fileInput" class="file-input" accept=".txt,.pdf">
+        <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+          ⇪ Upload File
+        </button>
+        <div class="theme-toggle" onclick="toggleDarkMode()" role="button" aria-label="Toggle dark and light mode">
+          <div class="toggle-icons">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 18a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zm8.7-11.7a1 1 0 0 1 0 1.4l-1.4 1.4a1 1 0 0 1-1.4-1.4l1.4-1.4a1 1 0 0 1 1.4 0zm-14 0a1 1 0 0 1 1.4 0l1.4 1.4a1 1 0 0 1-1.4 1.4l-1.4-1.4a1 1 0 0 1 0-1.4zM22 12a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zM5 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1zm13.1 4.9a1 1 0 0 1-1.4 1.4l-1.4-1.4a1 1 0 1 1 1.4-1.4l1.4 1.4zm-10.6 0a1 1 0 0 1 1.4 1.4l-1.4 1.4a1 1 0 1 1-1.4-1.4l1.4-1.4zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2.006A10 10 0 1 0 20 14a10.007 10.007 0 0 0-10-11.994zM10 4.037a8 8 0 1 1 0 15.926 7.96 7.96 0 0 1-1.95-1.026A7.957 7.957 0 0 0 10 18.001a8 8 0 0 0 0-16 7.957 7.957 0 0 0-1.95 1.026A7.96 7.96 0 0 1 10 4.037z"/></svg>
+          </div>
+          <div class="toggle-track">
+            <div class="toggle-handle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="wpmValue">0</div>
+        <div class="stat-label">Words / Minute</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="accuracyValue">100%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="timeValue">0:00</div>
+        <div class="stat-label">Time Elapsed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="progressValue">0/0</div>
+        <div class="stat-label">Lines Progress</div>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title" id="documentTitle">Sample Text</h2>
+          <div class="file-info" id="fileInfo">6 lines, 117 words, est. 3 min @ 40 WPM</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-secondary" onclick="resetTest()">↻ Reset</button>
+          <button class="btn btn-secondary" id="pauseBtn" onclick="pauseTest()" style="display: none;">❚❚ Pause</button>
+          <button class="btn btn-primary" id="startBtn" onclick="startTest()">▶ Start</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('practice', this)">Practice</button>
+        <button class="tab" onclick="showTab('library', this)">Library</button>
+        <button class="tab" onclick="showTab('stats', this)">Statistics</button>
+      </div>
+
+      <div id="practiceTab" class="tab-content">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+        
+        <div class="typing-area" id="typingArea">
+          <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📄</div>
+            <h3>Upload a file to get started</h3>
+            <p>Practice your typing with any .txt or .pdf document.</p>
+          </div>
+        </div>
+
+        <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+        <div class="pagination" id="pagination" style="display: none;">
+          <button class="btn btn-secondary" onclick="previousPage()">← Previous</button>
+          <span id="pageInfo">Page 1 of 1</span>
+          <button class="btn btn-secondary" onclick="nextPage()">Next →</button>
+        </div>
+      </div>
+
+      <div id="libraryTab" class="tab-content hidden">
+        <div class="library-grid">
+          <div class="book-card" onclick="loadBook('pride-prejudice')">
+            <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/1342/images/cover.jpg" alt="Pride and Prejudice Cover"></div>
+            <div class="book-info">
+              <div class="book-title">Pride and Prejudice</div>
+              <div class="book-author">Jane Austen</div>
+            </div>
+          </div>
+          <div class="book-card" onclick="loadBook('moby-dick')">
+             <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/2701/images/cover.jpg" alt="Moby Dick Cover"></div>
+            <div class="book-info">
+              <div class="book-title">Moby Dick</div>
+              <div class="book-author">Herman Melville</div>
+            </div>
+          </div>
+          <div class="book-card" onclick="loadBook('sherlock-holmes')">
+            <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/1661/images/cover.jpg" alt="Sherlock Holmes Cover"></div>
+            <div class="book-info">
+              <div class="book-title">The Adventures of Sherlock Holmes</div>
+              <div class="book-author">Arthur Conan Doyle</div>
+            </div>
+          </div>
+          <div class="book-card" onclick="loadBook('great-gatsby')">
+            <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/64317/images/cover.jpg" alt="The Great Gatsby Cover"></div>
+            <div class="book-info">
+              <div class="book-title">The Great Gatsby</div>
+              <div class="book-author">F. Scott Fitzgerald</div>
+            </div>
+          </div>
+          <div class="book-card" onclick="loadBook('frankenstein')">
+            <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/84/images/cover.jpg" alt="Frankenstein Cover"></div>
+            <div class="book-info">
+              <div class="book-title">Frankenstein</div>
+              <div class="book-author">Mary Shelley</div>
+            </div>
+          </div>
+          <div class="book-card" onclick="loadBook('two-cities')">
+            <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/98/images/cover.jpg" alt="A Tale of Two Cities Cover"></div>
+            <div class="book-info">
+              <div class="book-title">A Tale of Two Cities</div>
+              <div class="book-author">Charles Dickens</div>
+            </div>
+          </div>
+           <div class="book-card" onclick="loadBook('dracula')">
+            <div class="book-cover"><img src="https://www.gutenberg.org/cache/epub/345/images/cover.jpg" alt="Dracula Cover"></div>
+            <div class="book-info">
+              <div class="book-title">Dracula</div>
+              <div class="book-author">Bram Stoker</div>
+            </div>
+          </div>
+          <div class="book-card" onclick="loadBook('sample')">
+            <div class="book-cover" style="padding: 1rem; text-align: center; font-weight: 500; color: var(--text-secondary);">Sample Text</div>
+            <div class="book-info">
+              <div class="book-title">Sample Text</div>
+              <div class="book-author">TypePractice</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="statsTab" class="tab-content hidden">
+        <h3>📊 Detailed Statistics</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="totalChars">0</div>
+            <div class="stat-label">Total Characters</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="correctChars">0</div>
+            <div class="stat-label">Correct Characters</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="errorCount">0</div>
+            <div class="stat-label">Errors</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="topWPM">0</div>
+            <div class="stat-label">Top WPM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
